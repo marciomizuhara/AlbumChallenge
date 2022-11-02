@@ -10,23 +10,24 @@ The bot was mainly developed to be used with Replit (replit.com/) as it's hosted
 Either way, this freeCodeCamp tutorial https://www.youtube.com/watch?v=SPTfmiYiuok&ab_channel=freeCodeCamp.org contains all information needed to host a discord bot on Replit.
 
 # Commands
-* **!roll 2022** -----> Rolls a random album from the 2022 releases list.
-* **!newalbum** - ARTIST - ALBUM - SPOTIFY** -----> Adds a new album to the 2022 releases list.
-* **!roll alltime** -----> Rolls a random album from the RYM best albums ever.
-* **!roll 2022 only GENRE** -----> Rolls only albums tagged with the specified genre from the 2022 releases list.
-* **!roll 2022 ignore GENRE** -----> Ignores the specified genre when rolling an album from the 2022 releases list.
-* **!update** -----> Atualiza sua lista de álbuns ouvidos com o último álbum rollado.
-* **!mystatus** -----> Exibe seus status no desafio.
-* **!myratings** -----> Exibe seus álbuns ouvidos melhores avaliados.
-* **!myreviews** -----> Exibe, por mensagem direta (DM), todas as resenhas que você já realizou no desafio.
-* **!2022status** -----> Exibe a quantidade de álbuns da lista de lançamentos de 2022.
-* **!list2022** -----> Exibe todos os álbuns já adicionados à lista de lançamentos de 2022.
-* **!list LETRA** -----> Exibe todos os artistas adicionados na lista de lançamentos de 2022 que comecem com a LETRA escolhida.
-* **!id NUMERO** -----> Exibe o álbum com o respectivo ID
-* **!review ID TEXTO** -----> Salva o texto como a resenha para o álbum do respectivo ID
-* **!rating ID NOTA** -----> Salva a nota para o álbum do respectivo ID
-* **!getreviews ID** -----> Exibe todas as resenhas para o álbum do respectivo ID
-* **!getratings ID** -----> Exibe todas as notas para o álbum do respectivo ID
-* **!topalbums** -----> Exibe os álbuns mais bem avaliados do server
-* **!users** -----> Exibe todos os usuários participantes do desafio.
-* **leaderboard** -----> Exibe a leaderboard do desafio
+* **!roll 2022** -----> Rolls a random album from the 2022 releases list
+* **!newalbum** - ARTIST - ALBUM - SPOTIFY** -----> Adds a new album to the 2022 releases list
+* **!roll alltime** -----> Rolls a random album from the RYM best albums ever
+* **!roll 2022 only GENRE** -----> Rolls only albums tagged with the specified genre from the 2022 releases list
+* **!roll 2022 ignore GENRE** -----> Ignores the specified genre when rolling an album from the 2022 releases list
+* **!update** -----> Updates you list of listened albums with the last rolled album
+* **!mystatus** -----> Shows some information regarding your challenge status
+* **!myratings** -----> Shows your listened albums sorted by the highest rated
+* **!myreviews** -----> Receives a direct message from the bot with all your reviews submitted to the challenge
+* **!2022status** -----> Shows some information regarding the 2022 releases list status
+* **!list2022** -----> Shows all albums added to the 2022 releases list
+* **!list LETTER** -----> Shows all artists added to the 2022 releses list starting with the LETTER specified
+* **!id NUMBER** -----> Shows all information regarding the album with the specified NUMBER (id)
+* **!review ID TEXT** -----> Saves the TEXT as the review for the specified album ID
+* **!rating ID RATING** -----> Saves the RATING as the rating for the specified album ID
+* **!getreviews ID** -----> Shows all reviews submitted for the specified album ID
+* **!getratings ID** -----> Shows all ratings submitted for the specified album ID. It also returns the average rating for the album
+* **!top NUMBER** -----> Shows the top NUMBER albums with the highest ratings on the challenge
+* **!top NUMBER** -----> Shows the bottom NUMBER albums with the lowest ratings on the challenge
+* **!users** -----> Shows all users participating in the challenge
+* **leaderboard** -----> Show all users participating in the challenge, sorted by the ones with the most albums rolled.
