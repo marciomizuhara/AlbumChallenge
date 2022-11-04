@@ -499,6 +499,13 @@ async def on_message(message):
             index -= 1
         await message.channel.send(divider)
 
+    if message.content.startswith('!setcountry'):
+        id = int(message.content.split(' ', 2)[1])
+        c = message.content.split(' ', 2)[2:]
+        country = ' '.join(c).title()
+        db['2022'][id]['country'] = country
+        await message.channel.send(f'{country} atribuido para o id {db["2022"][id]["id"]}')
+
     # FUNCIONANDO!!!
     if message.content.startswith('!users'):
         # total = len(db.keys())
@@ -569,11 +576,12 @@ async def on_message(message):
         rating = {}
         genre = ''
         year = '2022'
+        country = '#'
         added_on_day = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%d/%m/%Y")
         added_on_time = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%H:%M:%S")
         added_by = str(message.author)
         new = {'artist': artist, 'album': album, 'spotify': spotify, 'id': id, 'reviews': reviews, 'rating': rating,
-               'genre': genre, 'year': year, 'added_on_day': added_on_day, 'added_on_time': added_on_time,
+               'genre': genre, 'year': year, 'country': country, 'added_on_day': added_on_day, 'added_on_time': added_on_time,
                'added_by': added_by}
         album_list = [x['album'] for x in db['2022']]
         if db['points'][str(message.author)] > 0:
@@ -662,7 +670,8 @@ async def on_message(message):
             id = id - 1000
         album = db[lista][id]
         await message.channel.send(
-            f'**{album["artist"]} - {album["album"]} ({album["year"]})**\n*{album["genre"]}*\n{divider}adicionado em **{album["added_on_day"]}** às **{album["added_on_time"]}** por **{album["added_by"]}**\n\n{album["spotify"]}')
+            f'**{album["artist"]} - {album["album"]} ({album["year"]})**\n*{album["genre"]}*\n'
+            f'**{album["country"]}**\n{divider}adicionado em **{album["added_on_day"]}** às **{album["added_on_time"]}** por **{album["added_by"]}**\n\n{album["spotify"]}')
 
     #############################################################################
 
@@ -683,7 +692,8 @@ async def on_message(message):
 
 #############################################################################
 
-my_secret = os.environ['TOKEN']
+
+my_secret = os.environ['TOKEN'] # Insert your discord bot token here
 
 keep_alive()
 try:
