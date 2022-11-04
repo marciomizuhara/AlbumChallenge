@@ -29,6 +29,9 @@ from functions.reviews import *
 from functions.helpers import *
 from functions.user import *
 
+# db.db_url = os.environ['DB']
+REPLIT_DB_URL = os.getenv("DB")
+
 client = discord.Client(intents=discord.Intents.default())
 
 # AOTY Set main url to scrap from
@@ -51,14 +54,48 @@ album_cover = page_soup.findAll("div", {"class": "browse_list_wrapper"})
 album_rating = page_soup.findAll("div", {"class": "clamp-score-wrap"})
 album_summary = page_soup.findAll("div", {"class": "summary"})
 
+# ALLTIME
+file = pd.read_csv('1000.txt')
+lista = pd.DataFrame(file)
+lista = file.transpose()
+
+# 2022
+file2022 = pd.read_csv('2022.txt')
+lista2022 = pd.DataFrame(file2022)
+lista2022 = file2022.transpose()
+
+
+# album_list = []
+
+# def update_badge(user, level):
+#   if user in db.keys():
+#     level in db[user]:
+#     badges = db[user]
+#     badges.append(level)
+#     db[user] = badges
+#   else:
+#     db[user] = level
+
+
+# db['2022'][id]['reviews'][str(user)] = review
+
+
+# db['2022'][id]['reviews'][str(user)] = review
+
 
 def update_album_genre(user, id, genre):
     if str(user) in db.keys():
+        print('aqui a')
+        # if str(user) not in db['2022'][id]['rating'].keys():
+        #   db['2022'][id]['rating'][str(user)] = {}
         if id < 1000:
+            print('aqui b')
             db['2022'][id]['genre'] = genre.lower()
         else:
             album_id = id - 1000
+            print('aqui c')
             db['alltime'][album_id]['genre'] = genre.lower()
+            print('aqui d')
     else:
         pass
 
@@ -66,12 +103,14 @@ def update_album_genre(user, id, genre):
 def unique_roll(lista):
     roll = random.randint(0, len(db[lista]) - 1)
     album = db[lista][roll]
+    print('album retornando da função', album)
     return album
 
 
 def filtered_roll_random(add_filter):
     roll = random.randint(0, len(add_filter) - 1)
     album = add_filter[roll]
+    print('Entrou aqui no random, e returnou:', album['artist'])
     return album
 
 
@@ -93,6 +132,7 @@ def filtered_roll(user, filter_list, operator, genre):
         else:
             pass
     except:
+        print('erro dentro do filtered_roll')
         pass
     album = filtered_roll_random(add_filter)
     return album
@@ -141,11 +181,68 @@ async def on_message(message):
     if message.content.startswith('!acabou'):
         await message.channel.send("https://thumbs.gfycat.com/AnchoredDesertedEft-size_restricted.gif")
 
+    if message.content.startswith('!run'):
+        pass
+        # for user in db.keys():
+        #   if "#" in user and "temp" not in user:
+        #     for album in db[user]:
+        #       try:
+        #         del album['spotify']
+        #       except:
+        #         print(user, album['id'])
+        #       try:
+        #         del album['reviews']
+        #       except:
+        #         print(user, album['id'])
+        #       try:
+        #         del album['rating']
+        #       except:
+        #         print(user, album['id'])
+        #       try:
+        #         del album['genre']
+        #       except:
+        #         print(user, album['id'])
+        #       try:
+        #         del album['added_by']
+        #       except:
+        #         print(user, album['id'])
+        #       try:
+        #         del album['added_on_time']
+        #       except:
+        #         print(user, album['id'])
+
+        # for album in db['2022']:
+        #   album["added_on_day"] = 'Not Available'
+        #   album["added_on_time"] = 'Not Available'
+        #   try:
+        #     del album['added_on']
+        #   except:
+        #     print('deu ruim')
+
+        # genre_list = []
+        # for album in db['2022']:
+        #   add_genres = album['genre'].strip(' ').split(', ')
+        #   for genre in add_genres:
+        #     # print('gêneros', add_genres)
+        #     # print('gênero', genre)
+        #     # genre.strip(' ')
+        #     genre_list.append(genre)
+        # print('contagem post punk', genre_list.count('post-punk'))
+        # dict1 = dict((i, genre_list.count(i)) for i in genre_list)
+        # sorted_value_index = np.argsort(dict1.values())
+        # dictionary_keys = list(dict1.keys())
+        # sorted_dict = {dictionary_keys[i]: sorted(dict1.values())[i] for i in range(len(dictionary_keys))}
+
+        # print(sorted_dict)
 
     if message.content.startswith('!dburl'):
         print(os.getenv("REPLIT_DB_URL"))
         await message.channel.send(os.getenv("REPLIT_DB_URL"))
 
+        # counter = 1000
+        # for item in db['alltime']:
+        #   item['id'] = counter
+        #   counter += 1
 
     # ALL TIME
     if message.content.startswith('!roll alltime'):
@@ -185,6 +282,8 @@ async def on_message(message):
             await message.channel.send(
                 f'Algo deu errado.')
 
+    #######################################################
+
     if message.content.startswith('!filter'):
         filter = message.content.split(' ', 1)[-1]
         if filter.lower() == 'missing':
@@ -205,6 +304,31 @@ async def on_message(message):
                 for album in result:
                     await message.channel.send(f'**{album["id"]}**. {album["artist"]} - {album["album"]}')
                 await message.channel.send(f'{divider}')
+
+    #######################################################
+
+    if message.content.startswith('!country'):
+        c = message.content.split(' ', 1)[1:]
+        country = ' '.join(c).title()
+        if country.lower() == 'missing':
+            result = [v for v in db['2022'] if not v['country']]
+            if len(result) > 0:
+                await message.channel.send(f'Álbuns que precisam ser taggeados com o país:')
+                for album in result:
+                    await message.channel.send(f'**{album["id"]}**. {album["artist"]} - {album["album"]}\n')
+            else:
+                await message.channel.send(f'Todos os álbuns já foram taggeados com o país.')
+        else:
+            result = [v for v in db['2022'] if country in v['country']]
+            if len(result) < 1:
+                await message.channel.send(f'Parece que não há nenhum álbum do país **{country}**')
+            else:
+                await message.channel.send(f'Álbuns do país **{country}**:\n{divider}')
+                for album in result:
+                    await message.channel.send(f'**{album["id"]}**. {album["artist"]} - {album["album"]}')
+                await message.channel.send(f'{divider}')
+
+            #######################################################
 
     if message.content.startswith('!roll 2022'):
         check_user(str(message.author))
@@ -284,7 +408,7 @@ async def on_message(message):
         album_id = int(message.content.split(' ', 1)[-1])
         lista = id_helper(album_id)
         if album_id > 999:
-            album_id -= 1000
+            album_id - 1000
         await message.channel.send(
             f'Reviews do **{db[lista][album_id]["artist"]} - {db[lista][album_id]["album"]}:\n**')
         counter = 0
@@ -301,7 +425,7 @@ async def on_message(message):
         album_id = int(message.content.split(' ', 1)[-1])
         lista = id_helper(album_id)
         if album_id > 999:
-            album_id -= 1000
+            album_id - 1000
         await message.channel.send(f'Ratings do **{db[lista][album_id]["artist"]} - {db[lista][album_id]["album"]}**')
         average = []
         for rating in db[lista][album_id]['rating'].items():
@@ -334,14 +458,14 @@ async def on_message(message):
     ########################################################################
 
     if message.content.startswith('!2022status'):
-        # top_genres = top_genres()        
+        # top_genres = top_genres()
         total_notas, total_reviews = list_status()
         await message.channel.send(
             f"-A lista de lançamentos de 2022 tem **{len(db['2022'])} álbuns** adicionados.\n-Já foram atribuídas **{total_notas}** notas e **{total_reviews}** reviews.\n{divider}"
         )
         # for genre in sorted_genres:
-        #   await message.channel.send(            
-        #     f"***{genre[1]}** taggeados sob o gênero **{genre[0]}***")        
+        #   await message.channel.send(
+        #     f"***{genre[1]}** taggeados sob o gênero **{genre[0]}***")
     #######################################################################################
 
     if message.content.startswith('!mystatus'):
@@ -460,14 +584,14 @@ async def on_message(message):
 
     ########################################################################################
 
-    # HELPER   
+    # HELPER
     if message.content.startswith('!myalbums'):
         lista = myalbums(str(message.author))
         await message.channel.send(lista)
 
     #########################################################################################
 
-    # HELPER  
+    # HELPER
     if message.content.startswith('!missing'):
         missing_reviews, missing_ratings = missing(str(message.author))
         await message.channel.send(f'**{str(message.author)}**, seguem suas resenhas faltantes:\n{divider}')
@@ -499,7 +623,9 @@ async def on_message(message):
             index -= 1
         await message.channel.send(divider)
 
-    if message.content.startswith('!setcountry'):
+    ########################################################################################
+
+    if message.content.startswith('!sc'):
         id = int(message.content.split(' ', 2)[1])
         c = message.content.split(' ', 2)[2:]
         country = ' '.join(c).title()
@@ -567,6 +693,7 @@ async def on_message(message):
             db['alltime'] = [new]
 
     if message.content.startswith('!newalbum'):
+        create_db()
         album_novo = message.content.split(' - ')
         artist = album_novo[1]
         album = album_novo[2]
@@ -581,8 +708,8 @@ async def on_message(message):
         added_on_time = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%H:%M:%S")
         added_by = str(message.author)
         new = {'artist': artist, 'album': album, 'spotify': spotify, 'id': id, 'reviews': reviews, 'rating': rating,
-               'genre': genre, 'year': year, 'country': country, 'added_on_day': added_on_day, 'added_on_time': added_on_time,
-               'added_by': added_by}
+               'genre': genre, 'year': year, 'country': country, 'added_on_day': added_on_day,
+               'added_on_time': added_on_time, 'added_by': added_by}
         album_list = [x['album'] for x in db['2022']]
         if db['points'][str(message.author)] > 0:
             if '2022' in db.keys():
@@ -612,7 +739,7 @@ async def on_message(message):
         genres = list(set([x['genre'] for x in db['2022'] if type(x) is not str]))
         print(genres)
         # await message.channel.send(f'Gêneros da lista de lançamentos de 2022')
-        # await message.channel.send(', '.join(genres))        
+        # await message.channel.send(', '.join(genres))
 
     if message.content.startswith('!list2022'):
         new_entries = [[v for v in d.values()][:-1] for d in db['2022']]
@@ -663,6 +790,8 @@ async def on_message(message):
             await message.channel.send(
                 f'- **{number}** artistas com a letra **{letter.upper()}**')
 
+        #############################################################################
+
     if message.content.startswith('!id '):
         id = int(message.content.split(' ')[-1])
         lista = id_helper(id)
@@ -670,8 +799,7 @@ async def on_message(message):
             id = id - 1000
         album = db[lista][id]
         await message.channel.send(
-            f'**{album["artist"]} - {album["album"]} ({album["year"]})**\n*{album["genre"]}*\n'
-            f'**{album["country"]}**\n{divider}adicionado em **{album["added_on_day"]}** às **{album["added_on_time"]}** por **{album["added_by"]}**\n\n{album["spotify"]}')
+            f'**{album["artist"]} - {album["album"]} ({album["year"]})**\n*{album["genre"]}*\n**{album["country"]}**\n{divider}adicionado em **{album["added_on_day"]}** às **{album["added_on_time"]}** por **{album["added_by"]}**\n\n{album["spotify"]}')
 
     #############################################################################
 
@@ -691,7 +819,6 @@ async def on_message(message):
 
 
 #############################################################################
-
 
 my_secret = os.environ['TOKEN'] # Insert your discord bot token here
 

@@ -2,6 +2,12 @@ from replit import db
 
 divider = '---------------------------------------------------------------------------\n'
 
+def create_db():
+  if '2022' in db.keys():
+    pass
+  else:
+    db['2022'] = []
+
 
 def id_helper(id):
   lista = ''
