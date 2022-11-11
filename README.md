@@ -28,11 +28,13 @@ Either way, this freeCodeCamp tutorial https://www.youtube.com/watch?v=SPTfmiYiu
 * **!2022status** -----> Shows some information regarding the 2022 releases list status
 * **!list2022** -----> Shows all albums added to the 2022 releases list
 * **!list LETTER** -----> Shows all artists added to the 2022 releses list starting with the LETTER specified
-* **!id NUMBER** -----> Shows all information regarding the album with the specified NUMBER (id)
+* **!id ID** -----> Shows all information regarding the album with the specified ID (number)
 * **!review ID TEXT** -----> Saves the TEXT as the review for the specified album ID
 * **!rating ID RATING** -----> Saves the RATING as the rating for the specified album ID
 * **!getreviews ID** -----> Shows all reviews submitted for the specified album ID
 * **!getratings ID** -----> Shows all ratings submitted for the specified album ID. It also returns the average rating for the album
+* **!genre GENRE** -----> Sorts all albums submitted with the specified GENRE
+* **!country COUNTRY** -----> Sorts all albums submitted with the specified COUNTRY
 * **!top NUMBER** -----> Shows the top NUMBER albums with the highest ratings on the challenge
 * **!top NUMBER** -----> Shows the bottom NUMBER albums with the lowest ratings on the challenge
 * **!users** -----> Shows all users participating in the challenge
