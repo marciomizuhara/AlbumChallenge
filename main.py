@@ -284,9 +284,9 @@ async def on_message(message):
 
     #######################################################
 
-    if message.content.startswith('!filter'):
-        filter = message.content.split(' ', 1)[-1]
-        if filter.lower() == 'missing':
+    if message.content.startswith('!genre'):
+        genre = message.content.split(' ', 1)[-1]
+        if genre.lower() == 'missing':
             result = [v for v in db['2022'] if not v['genre']]
             # result = [v for v in db['2022'] if len(v['genre']) < 2]
             if len(result) > 0:
@@ -296,11 +296,11 @@ async def on_message(message):
             else:
                 await message.channel.send(f'Todos os álbuns já foram taggeados.')
         else:
-            result = [v for v in db['2022'] if filter in v['genre']]
+            result = [v for v in db['2022'] if genre in v['genre']]
             if len(result) < 1:
-                await message.channel.send(f'Parece que não há nenhum álbum taggeado com o gênero **{filter}**')
+                await message.channel.send(f'Parece que não há nenhum álbum taggeado com o gênero **{genre}**')
             else:
-                await message.channel.send(f'Álbuns taggeados com o(s) gênero(s) **{filter}**:\n{divider}')
+                await message.channel.send(f'Álbuns taggeados com o(s) gênero(s) **{genre}**:\n{divider}')
                 for album in result:
                     await message.channel.send(f'**{album["id"]}**. {album["artist"]} - {album["album"]}')
                 await message.channel.send(f'{divider}')
@@ -348,7 +348,7 @@ async def on_message(message):
                 f'{str(message.author)}, parece que não há nenhum álbum disponível para você ouvir com estas configurações'
                 )
         await message.channel.send(
-            f'Bem-vindo ao desafio dos lançamentos de 2022, {message.author}. \nO álbum escolhido para você foi o:\n{divider}**{album["id"]}. {album["artist"]} - {album["album"]}**\n*{album["genre"]}*\n{divider}Você tem 24 horas para dar uma audição nesse álbum. Ao final, adicione-o à sua lista, simplesmente digitando !update\n{album["spotify"]}'
+            f'Bem-vindo ao desafio dos lançamentos de 2022, {message.author}. \nO álbum escolhido para você foi o:\n{divider}**{album["id"]}. {album["artist"]} - {album["album"]}**\n*{album["genre"]}*\n**{album["country"]}**\n{divider}Você tem 24 horas para dar uma audição nesse álbum. Ao final, adicione-o à sua lista, simplesmente digitando !update\n{album["spotify"]}'
         )
         db[str(message.author) + '_temp_list'] = album
 
@@ -507,7 +507,7 @@ async def on_message(message):
                     f'- No momento, parece que você não tem nenhum álbum rollado para ouvir.'
                 )
             await message.channel.send(
-                f'- Você tem um total de **{db["points"][str(message.author)]}** ponto(s) para gastar.'
+                f'- Você tem um total de **{db["points"][str(message.author)]}** ponto(s) para gastar.\n{divider}'
             )
 
         #######################################################################################
@@ -692,7 +692,7 @@ async def on_message(message):
         else:
             db['alltime'] = [new]
 
-    if message.content.startswith('!newalbum'):
+    if message.content.startswith('!newalbum') or message.content.startswith('!new'):
         create_db()
         album_novo = message.content.split(' - ')
         artist = album_novo[1]
@@ -820,7 +820,7 @@ async def on_message(message):
 
 #############################################################################
 
-my_secret = os.environ['TOKEN'] # Insert your discord bot token here
+my_secret = os.environ['TOKEN']  # Insert your discord bot token here
 
 keep_alive()
 try:
